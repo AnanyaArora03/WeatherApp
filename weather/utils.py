@@ -1,21 +1,27 @@
 import unittest
 import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
-logging.basicConfig(level=logging.INFO, filename='utils.log', format='%(asctime)s %(levelname)s: %(message)s')
+file_handler = logging.FileHandler('utils.log')
+file_handler.setLevel(logging.INFO)
+logger.addHandler(file_handler)
+
 
 def extract_weather_info(weather_data):
     try:
         city = weather_data['name']
         temperature = weather_data['main']['temp']
         description = weather_data['weather'][0]['description']
-        logging.info(f"Extracted weather information for {city}: {temperature}°C, {description}")
+        logger.info(f"Extracted weather information for {city}: {temperature}°C, {description}")
         return city, temperature, description
     except KeyError as e:
-        logging.error(f"Error: Missing or unexpected data in API response - {e}")
-        raise e
+        logger.error(f"Error: Missing or unexpected data in API response - {e}")
+        raise ValueError(f"Error: Missing or unexpected data in API response - {e}")
     except Exception as e:
-        logging.error(f"An unexpected error occurred: {e}")
-        raise e
+        logger.error(f"An unexpected error occurred: {e}")
+        raise Exception(f"An unexpected error occurred: {e}")
+  
 
 class TestUtils(unittest.TestCase):
     def test_extract_weather_info(self):
