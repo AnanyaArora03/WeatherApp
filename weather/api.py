@@ -3,7 +3,7 @@ import os
 import json
 import requests
 from datetime import datetime, timedelta
-from api import Api, get_cached_weather_data
+import logging
 
 CACHE_DIR = 'cache'
 CACHE_EXPIRATION = timedelta(hours=1)  # Cache expiration time (1 hour)
@@ -16,7 +16,6 @@ class TestApi(unittest.TestCase):
         self.base_url = 'http://api.openweathermap.org/data/2.5/weather'
         self.cache_dir = 'cache'
         self.cache_expiration = timedelta(hours=1)
-        self.api = Api()
 
     def test_get_weather_data(self):
         city = 'London'
@@ -27,12 +26,8 @@ class TestApi(unittest.TestCase):
         }
         response = requests.get(self.base_url, params={'q': city, 'appid': self.api_key, 'units': 'metric'})
         response.json = lambda: expected_weather_data
-        actual_weather_data = self.api.get_weather_data(city)
+        actual_weather_data = get_weather_data(city)
         self.assertEqual(actual_weather_data, expected_weather_data)
-
-
-
-
 
     def test_get_cached_weather_data(self):
         city = 'London'
@@ -140,4 +135,4 @@ def get_weather_data(city):
         return weather_data
 
 if __name__ == '__main__':
-    unittest.main() 
+    unittest.main()
