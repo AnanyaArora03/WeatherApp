@@ -47,7 +47,7 @@ def get_weather_data(city):
     weather_data = get_cached_weather_data(city)
     if weather_data is None:
         try:
-            api_key = os.getenv('WEATHER_API_KEY')
+            api_key = os.getenv('fb2ccd727amsh77a52a499c052ebp1345fbjsn753d23e73d35')
             base_url = os.getenv('WEATHER_API_BASE_URL')
             params = {
                 'q': city,
