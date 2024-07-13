@@ -49,12 +49,13 @@ def get_weather_data(city):
         try:
             api_key = os.getenv('fb2ccd727amsh77a52a499c052ebp1345fbjsn753d23e73d35')
             base_url = os.getenv('weather-by-api-ninjas.p.rapidapi.com')
-            params = {
-                'q': city,
-                'appid': api_key,
-                'units': 'metric'
+           headers = {
+                'X-RapidAPI-Key': api_key,
+                'X-RapidAPI-Host': 'weather-by-api-ninjas.p.rapidapi.com'
             }
-            
+            params = {
+                'city': city
+            }
             response = requests.get(base_url, params=params, timeout=10)
             response.raise_for_status()
             weather_data = response.json()
@@ -77,16 +78,17 @@ def get_weather_data(city):
         return weather_data
 
 def extract_weather_info(weather_data):
+
     try:
-        city = weather_data['name']
-        temperature = weather_data['main']['temp']
-        description = weather_data['weather'][0]['description']
+        city = weather_data['city']
+        temperature = weather_data['temp']
+        description = weather_data['description']
         return city, temperature, description
     except KeyError as e:
         print(f"Error: Missing or unexpected data in API response - {e}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
-
+   
 def main():
     city = input("Enter a city name: ")
     if not city.strip():
