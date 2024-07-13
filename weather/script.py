@@ -2,6 +2,26 @@ import os
 import json
 from datetime import datetime, timedelta
 import requests
+from api import get_weather_data
+from utils import extract_weather_info
+
+def main():
+    city = input("Enter a city name: ")
+    if not city.strip():
+        print("Error: City name cannot be empty")
+        return
+    
+    try:
+        weather_data = get_weather_data(city)
+        city, temperature, description = extract_weather_info(weather_data)
+        print(f"Current weather in {city}: {temperature}°C, {description}")
+    except ValueError as e:
+        print(f"Error: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+if __name__ == "__main__":
+    main()
 
 CACHE_DIR = 'cache'
 CACHE_EXPIRATION = timedelta(hours=1)  # Cache expiration time (1 hour)
